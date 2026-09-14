@@ -443,3 +443,7 @@ Observe
 因为它把 Agent 和普通“输入一句话、输出一句话”的 LLM 区别直接暴露了出来：
 
 **它不是只生成答案，而是在一个环境中持续采取行动。**
+
+<img width="1346" height="1095" alt="9ccbdacf-9067-4bbd-9bc1-68d155ad28aa" src="https://github.com/user-attachments/assets/35f9ed34-1d6d-4a79-907d-8b14cccae8fb" />
+
+<img width="1346" height="1095" alt="6ac3ea5c-1bce-49be-9cd9-270e8f24c0f6" src="https://github.com/user-attachments/assets/da30cba7-d585-4462-8332-b556850e43bc" />

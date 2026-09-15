@@ -1381,3 +1381,11 @@ Verification
 > **我们人为设计了一套 Loop，让 LLM 在明确的行动空间、状态、反馈和约束中不断做决策。**
 
 这才是 Task01 真正比 Task00 上升的地方。
+
+<img width="1346" height="1095" alt="8e4f2ddbbe8d3327b5df64d18bfa0cdc" src="https://github.com/user-attachments/assets/a46e8099-44bf-47a1-aeb9-3f0b716457b7" />
+
+<img width="1346" height="1095" alt="316fad8bcd9f9741556eb494dc587c06" src="https://github.com/user-attachments/assets/7eb7ee7a-762e-4e25-b837-cec2eeba1fa6" />
+
+<img width="1346" height="1095" alt="59ba43392e87390dbde7e93ebedf59bc" src="https://github.com/user-attachments/assets/75cf34af-8fbf-4b18-b908-52e45be80b47" />
+
+<img width="1346" height="1095" alt="4ca9e9b3798cf39f97cff4a105d20f44" src="https://github.com/user-attachments/assets/1bc621d3-b0b1-41d8-b537-97920aa38069" />

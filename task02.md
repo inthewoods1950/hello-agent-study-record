@@ -856,3 +856,9 @@ Task01 是理解 Agent 如何“思考和行动”；
 Task02 则是在理解：
 
 > **如何把这些能力做成一个真正可以继续扩展的框架。**
+
+<img width="1346" height="1094" alt="ee884900-9c09-4a8f-9fc5-79de6284bc9a" src="https://github.com/user-attachments/assets/4e7161de-fb7a-4068-a82e-e6c9482bcebc" />
+
+<img width="1346" height="1094" alt="a5ec2ed6-7293-4397-80af-07e49f5d8249" src="https://github.com/user-attachments/assets/e7bc2e16-51c6-4036-ac5f-ccd9823c67ea" />
+
+<img width="1346" height="1094" alt="67d78908-6d0f-41a6-abb4-9835ae9192f2" src="https://github.com/user-attachments/assets/f1151095-321f-416f-b007-623334b23a7f" />

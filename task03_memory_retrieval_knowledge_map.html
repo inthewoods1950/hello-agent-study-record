@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Task03 · Memory & Retrieval 知识地图</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --panel:#171a21;
+    --panel2:#1f2430;
+    --text:#eef2f7;
+    --muted:#a8b0bf;
+    --line:#353c4a;
+    --accent:#8fb3ff;
+    --good:#9ad8a6;
+    --warn:#f1cf7a;
+    --pink:#e9a7cf;
+    --cyan:#8ed8df;
+    --shadow:0 10px 30px rgba(0,0,0,.22);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:linear-gradient(180deg,#0f1115 0%,#121620 100%);
+    color:var(--text);
+    font-family:Inter,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,-apple-system,sans-serif;
+    line-height:1.65;
+  }
+  .wrap{max-width:1280px;margin:0 auto;padding:28px}
+  header{
+    background:linear-gradient(135deg,#1a2130,#131820);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px;
+    box-shadow:var(--shadow);
+    margin-bottom:22px;
+  }
+  h1{margin:0 0 10px;font-size:32px;letter-spacing:.2px}
+  .subtitle{color:var(--muted);max-width:900px}
+  .toolbar{
+    display:flex;gap:10px;flex-wrap:wrap;margin-top:18px
+  }
+  input{
+    flex:1;min-width:260px;
+    background:#0f131b;border:1px solid var(--line);color:var(--text);
+    padding:11px 14px;border-radius:10px;font-size:14px;outline:none
+  }
+  button{
+    background:var(--panel2);color:var(--text);border:1px solid var(--line);
+    border-radius:10px;padding:10px 14px;cursor:pointer
+  }
+  button:hover{border-color:var(--accent)}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+  }
+  @media (max-width:900px){.grid{grid-template-columns:1fr}.wrap{padding:14px}}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .card summary{
+    list-style:none;cursor:pointer;
+    padding:18px 20px;
+    font-weight:700;font-size:18px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .card summary::-webkit-details-marker{display:none}
+  .card summary::after{content:"＋";color:var(--muted);font-size:20px}
+  .card[open] summary::after{content:"－"}
+  .content{padding:0 20px 20px}
+  .node{
+    border-left:3px solid var(--accent);
+    background:var(--panel2);
+    padding:11px 13px;
+    margin:10px 0;
+    border-radius:9px;
+  }
+  .node.good{border-left-color:var(--good)}
+  .node.warn{border-left-color:var(--warn)}
+  .node.pink{border-left-color:var(--pink)}
+  .node.cyan{border-left-color:var(--cyan)}
+  .node b{color:white}
+  .flow{
+    display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:12px 0
+  }
+  .pill{
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 10px;
+    background:#111621;
+    font-size:13px;
+  }
+  .arrow{color:var(--muted)}
+  code{
+    font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;
+    background:#10141c;border:1px solid #2b3240;
+    padding:2px 5px;border-radius:5px;color:#d9e5ff
+  }
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:#121722}
+  .full{grid-column:1/-1}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:12px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}
+  .footer{color:var(--muted);text-align:center;padding:28px 0 10px;font-size:13px}
+  .hidden{display:none!important}
+  .mini{font-size:13px;color:var(--muted)}
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">HelloAgents · Task03</div>
+    <h1>Memory & Retrieval 知识地图</h1>
+    <div class="subtitle">
+      这不是章节目录，而是一张“系统如何记住、如何找回、如何把信息交给 Agent”的结构图。
+      建议先看「总览」，再按模块展开。可搜索关键词，例如：<code>Qdrant</code>、<code>HyDE</code>、<code>Semantic Memory</code>。
+    </div>
+    <div class="toolbar">
+      <input id="search" placeholder="搜索知识点…" />
+      <button onclick="setAll(true)">全部展开</button>
+      <button onclick="setAll(false)">全部收起</button>
+      <button onclick="clearSearch()">清除搜索</button>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--accent)"></span>核心概念</span>
+      <span><span class="dot" style="background:var(--good)"></span>正确心智模型</span>
+      <span><span class="dot" style="background:var(--warn)"></span>常见误区 / Failure Mode</span>
+      <span><span class="dot" style="background:var(--pink)"></span>Agent 集成</span>
+      <span><span class="dot" style="background:var(--cyan)"></span>最终项目映射</span>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <details class="card full" open data-search>
+      <summary>0. 总览：Chapter 8 其实只有两条主干</summary>
+      <div class="content">
+        <div class="node good"><b>Write Path（怎么记）</b></div>
+        <div class="flow">
+          <span class="pill">新信息</span><span class="arrow">→</span>
+          <span class="pill">Encoding / Parse / Classification</span><span class="arrow">→</span>
+          <span class="pill">Chunk / Embedding</span><span class="arrow">→</span>
+          <span class="pill">Storage / Index</span><span class="arrow">→</span>
+          <span class="pill">Consolidation / Forgetting</span>
+        </div>
+        <div class="node good"><b>Read Path（怎么想起来）</b></div>
+        <div class="flow">
+          <span class="pill">当前问题</span><span class="arrow">→</span>
+          <span class="pill">Route</span><span class="arrow">→</span>
+          <span class="pill">Memory / RAG Retrieval</span><span class="arrow">→</span>
+          <span class="pill">Candidate Pool</span><span class="arrow">→</span>
+          <span class="pill">Rerank</span><span class="arrow">→</span>
+          <span class="pill">Context</span><span class="arrow">→</span>
+          <span class="pill">LLM</span>
+        </div>
+        <div class="node warn"><b>总原则：</b>系统不是“存得越多越好”或“模块越多越聪明”。每增加一个模块，也增加一个潜在 failure point。</div>
+      </div>
+    </details>
+
+    <details class="card" open data-search>
+      <summary>1. History vs Memory</summary>
+      <div class="content">
+        <table>
+          <tr><th>History</th><th>Memory</th></tr>
+          <tr><td>当前 Agent 实例中的有序消息</td><td>可管理、可检索、可强化、可遗忘的信息资产</td></tr>
+          <tr><td>通常随实例生命周期存在</td><td>部分类型可持久化</td></tr>
+          <tr><td>主要是 user / assistant / tool 消息</td><td>可包含 importance、timestamp、metadata、embedding 等</td></tr>
+        </table>
+        <div class="node good"><b>一句话：</b>“模型记得上一句话” ≠ “系统拥有长期记忆能力”。</div>
+      </div>
+    </details>
+
+    <details class="card" open data-search>
+      <summary>2. 四类 Memory</summary>
+      <div class="content">
+        <div class="node"><b>Working Memory</b>：我现在正在处理什么？短期、容量有限、可 TTL、运行时为主。</div>
+        <div class="node"><b>Episodic Memory</b>：发生过什么？事件 + 时间 + 上下文。</div>
+        <div class="node"><b>Semantic Memory</b>：我知道什么？稳定事实、规律、偏好、概念、抽象结论。</div>
+        <div class="node"><b>Perceptual Memory</b>：我感知到了什么？图片、音频、视频、OCR、图表等多模态输入及其特征。</div>
+        <div class="node good"><b>关键关系：</b>Episodic 是 evidence；Semantic 是 abstraction；Perceptual 是 raw evidence 的来源之一。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>3. Memory Lifecycle</summary>
+      <div class="content">
+        <div class="flow">
+          <span class="pill">Encoding</span><span class="arrow">→</span>
+          <span class="pill">Storage</span><span class="arrow">→</span>
+          <span class="pill">Retrieval</span><span class="arrow">→</span>
+          <span class="pill">Consolidation</span><span class="arrow">→</span>
+          <span class="pill">Forgetting</span>
+        </div>
+        <div class="node"><b>Importance</b>：是 memory policy 的信号，不是真理分数。</div>
+        <div class="node"><b>Reinforcement</b>：重复出现的信息可以提高 importance，但 repetition ≠ truth。</div>
+        <div class="node"><b>Consolidation</b>：例如多次 Episode → 抽象成 Semantic。</div>
+        <div class="node"><b>Forgetting</b>：降低噪声，避免 Memory 无限膨胀。</div>
+        <div class="node warn"><b>成熟系统应额外区分：</b><code>importance</code>、<code>confidence</code>、<code>source</code>、<code>last_verified</code>。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>4. Memory Policy / 分类策略</summary>
+      <div class="content">
+        <div class="node warn"><b>Rule-based classifier</b>：关键词命中容易高估效果；对 use/mention、否定、上下文很脆弱。</div>
+        <div class="node"><b>LLM classifier</b>：语义理解更好，但仍会误判、格式错误或返回 None。</div>
+        <div class="node good"><b>Hybrid</b>：高置信规则处理明显情况，其余交给 LLM，再经过 Parser + Validator + Retry。</div>
+        <div class="flow">
+          <span class="pill">Input</span><span class="arrow">→</span>
+          <span class="pill">Rules</span><span class="arrow">→</span>
+          <span class="pill">LLM</span><span class="arrow">→</span>
+          <span class="pill">Parser</span><span class="arrow">→</span>
+          <span class="pill">Validator</span><span class="arrow">→</span>
+          <span class="pill">Memory Type</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="card" open data-search>
+      <summary>5. Persistence / SQLite / Qdrant</summary>
+      <div class="content">
+        <div class="node good"><b>Persistence</b>：程序死了，数据没死。</div>
+        <div class="node"><b>SQLite</b>：保存完整结构化记录——content、user、importance、timestamp、metadata。</div>
+        <div class="node"><b>MiniLM / Embedding</b>：把文本翻译成向量。</div>
+        <div class="node"><b>Qdrant</b>：保存 / 索引 / 搜索向量，回答“哪个 ID 在语义空间里更近？”</div>
+        <div class="node good"><b>同一个 memory_id</b> 把 Qdrant 的向量结果与 SQLite 的完整记录 join 起来。</div>
+        <div class="mini">Mnemonic：MiniLM = 翻译；Qdrant = 找人；SQLite = 查档案。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>6. Qdrant Local vs Server</summary>
+      <div class="content">
+        <div class="node"><b>Local Mode</b>：Qdrant 嵌在 Python 进程里，直接读写本地文件，无 HTTP。</div>
+        <div class="node"><b>Server Mode</b>：Python Client 通过 HTTP/gRPC 连接独立 Qdrant Server。</div>
+        <div class="node warn"><b>不是“本地就用 CPU、Server 就不用”。</b>Server 也可以跑在本机 Docker，照样吃本机 CPU/RAM。</div>
+        <div class="node warn"><b>Local Mode 限制：</b>同一 storage folder 不适合多个 Client 并发打开；payload index 也不是完整 Server 行为。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>7. Embedding：从文本到 384-D 向量</summary>
+      <div class="content">
+        <div class="flow">
+          <span class="pill">Text</span><span class="arrow">→</span>
+          <span class="pill">Tokenizer</span><span class="arrow">→</span>
+          <span class="pill">Tokens/Subwords</span><span class="arrow">→</span>
+          <span class="pill">Transformer</span><span class="arrow">→</span>
+          <span class="pill">Contextual Token Embeddings</span><span class="arrow">→</span>
+          <span class="pill">Mean Pooling</span><span class="arrow">→</span>
+          <span class="pill">Sentence Embedding</span>
+        </div>
+        <div class="node"><b>all-MiniLM-L6-v2</b>：输出 384 维句向量。</div>
+        <div class="node"><b>[PAD]</b>：为了 batch 对齐；attention_mask=0，不参与 pooling。</div>
+        <div class="node"><b>[CLS] / [SEP]</b>：特殊 token；在该 pooling 方案中属于有效 token。</div>
+        <div class="node warn"><b>384 维不是 384 个可解释的人类概念。</b>它是 latent distributed representation。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>8. Normalize / Dot / Cosine</summary>
+      <div class="content">
+        <div class="node"><b>Vector length</b>：\(||A||=\sqrt{\sum a_i^2}\)</div>
+        <div class="node"><b>Dot Product</b>：\(A·B = ||A||||B||\cos\theta\)，混合长度和方向。</div>
+        <div class="node"><b>Cosine</b>：只比较方向；归一化后 dot ≈ cosine。</div>
+        <div class="node warn"><b>Similarity score 不是 probability。</b>0.8 ≠ “80% 相关”。</div>
+        <div class="node warn"><b>Embedding 更像“主题/语义相关”而不是“逻辑一致”。</b>“喜欢无糖”和“讨厌无糖”仍可能很接近。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>9. Top-K / Threshold / Precision / Recall / F1</summary>
+      <div class="content">
+        <div class="node"><b>Top-K</b>：固定最多取几个。</div>
+        <div class="node"><b>Threshold</b>：最低分数门槛。</div>
+        <div class="node"><b>Precision</b>：捞上来的结果有多干净。</div>
+        <div class="node"><b>Recall</b>：真正相关的内容捞回来多少。</div>
+        <div class="node"><b>F1</b>：Precision 和 Recall 的调和平均；压缩成单值但会丢 trade-off。</div>
+        <div class="node good"><b>Signal Detection 对应：</b>similarity≈evidence strength；threshold≈criterion；TP≈hit；FP≈false alarm。</div>
+        <div class="node"><b>Operating point</b>：某个 threshold 对应的 (Recall, Precision) 坐标。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>10. ANN / HNSW</summary>
+      <div class="content">
+        <div class="node"><b>Exact Search</b>：Query 与所有 vector 比较。</div>
+        <div class="node"><b>ANN</b>：Approximate Nearest Neighbor，不扫全量，用索引换速度。</div>
+        <div class="node"><b>HNSW</b>：多层图，不是树。高层稀疏、负责远距离导航；Layer 0 最密。</div>
+        <div class="node warn"><b>高层节点不是“更重要”。</b>通常来自概率式 promotion。</div>
+        <div class="node warn"><b>Greedy local minimum</b>：只走“眼前更近”的路可能错过 global best。</div>
+        <div class="node good"><b>Candidate Pool</b>：同时保留多个搜索分支，降低单一路径卡死风险。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>11. Metadata Filter</summary>
+      <div class="content">
+        <div class="node good"><b>Filter 决定谁有资格参赛；Similarity 决定参赛者怎么排序。</b></div>
+        <div class="node"><b>适合 hard filter</b>：user_id、memory_type、time range、namespace。</div>
+        <div class="node warn"><b>Importance 不一定适合 hard filter。</b>高相关但 importance 略低的信息可能被直接排除。</div>
+      </div>
+    </details>
+
+    <details class="card" open data-search>
+      <summary>12. Memory vs RAG</summary>
+      <div class="content">
+        <div class="node"><b>Memory</b>：关于用户、Agent、自身历史的信息。</div>
+        <div class="node"><b>RAG Knowledge Base</b>：外部文档、资料、知识库。</div>
+        <div class="node good"><b>Memory ≠ RAG。</b>Memory 只是可能成为 Retrieval source 之一。</div>
+        <div class="node"><b>典型区分：</b>“我之前学过什么？” → Memory；“Cross-Encoder 原理是什么？” → RAG。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>13. Document RAG</summary>
+      <div class="content">
+        <div class="flow">
+          <span class="pill">Document</span><span class="arrow">→</span>
+          <span class="pill">Parse / OCR</span><span class="arrow">→</span>
+          <span class="pill">Chunk</span><span class="arrow">→</span>
+          <span class="pill">Embedding</span><span class="arrow">→</span>
+          <span class="pill">Vector Store</span><span class="arrow">→</span>
+          <span class="pill">Retrieve</span><span class="arrow">→</span>
+          <span class="pill">Context</span><span class="arrow">→</span>
+          <span class="pill">LLM</span>
+        </div>
+        <div class="node"><b>Parse</b>：把当前表示转换成下一阶段程序能明确处理的结构。</div>
+        <div class="node"><b>OCR</b>：从图像像素识别文字；它不等于 chunking，也不天然消耗 LLM token。</div>
+        <div class="node warn"><b>Retrieval relevance ≠ answer sufficiency。</b>相关资料不一定足够回答问题。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>14. Chunking / Overlap / Neighbor Expansion</summary>
+      <div class="content">
+        <div class="node"><b>Chunk 太小</b>：语义纯，similarity 可能高，但上下文不完整。</div>
+        <div class="node"><b>Chunk 太大</b>：信息完整，但 semantic noise 和 token 成本增加。</div>
+        <div class="node"><b>Overlap</b>：降低关键关系被 chunk boundary 切断的概率。</div>
+        <div class="node warn"><b>Overlap 太大</b>：重复 embedding、存储、检索、Context。</div>
+        <div class="node warn"><b>HNSW adjacency ≠ Document adjacency。</b>需要 doc_id / chunk_index 才能做邻居扩展。</div>
+        <div class="node good"><b>成熟组合：</b>中等 chunk + 小 overlap + neighbor/context expansion。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>15. MQE / HyDE / Query Normalization</summary>
+      <div class="content">
+        <div class="node"><b>MQE</b>：一个问题 → 多个不同搜索表达，提高 Recall。</div>
+        <div class="node"><b>HyDE</b>：问题 → 假想答案文档 → 用“像答案的文本”去搜真实文档。</div>
+        <div class="node"><b>Query Normalization</b>：把非标准表达改成更标准、更稳定的 canonical query。</div>
+        <div class="node good"><b>Canonical Query</b>：系统选定的标准代表表达，例如 “memorizing training set” → “prevent overfitting”。</div>
+        <div class="node warn"><b>HyDE 的假答案不是最终事实。</b>它只是 search probe。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>16. Retriever vs Reranker</summary>
+      <div class="content">
+        <div class="node"><b>Bi-Encoder Retriever</b>：Query / Document 分别编码成向量，再算 cosine；快，可预计算。</div>
+        <div class="node"><b>Cross-Encoder Reranker</b>：<code>[CLS] Query [SEP] Document [SEP]</code> 一起进同一个 Transformer，token 可直接 self-attention。</div>
+        <div class="flow">
+          <span class="pill">海量候选</span><span class="arrow">→</span>
+          <span class="pill">Fast Retriever</span><span class="arrow">→</span>
+          <span class="pill">Candidate Pool</span><span class="arrow">→</span>
+          <span class="pill">Cross-Encoder</span><span class="arrow">→</span>
+          <span class="pill">Final Top-K</span>
+        </div>
+        <div class="node good"><b>Retriever 偏 Recall；Reranker 偏 Precision。</b></div>
+        <div class="node warn"><b>Reranker ≠ 真理机器。</b>更复杂的模型也会受 wording / training distribution 影响。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>17. Robustness / Query Wording</summary>
+      <div class="content">
+        <div class="node"><b>Robust / 鲁棒</b>：意思不变、表达方式变化时，系统结果仍然稳定。</div>
+        <div class="node warn">如果 “prevent overfitting” 表现正常，而 “stop memorizing training set” 就乱排，说明对 wording 不够 robust。</div>
+        <div class="node good">Query normalization 可以减少 wording 带来的误差源，但不会让排序变成绝对正确。</div>
+      </div>
+    </details>
+
+    <details class="card" open data-search>
+      <summary>18. Memory + RAG + Agent Routing</summary>
+      <div class="content">
+        <div class="node pink"><b>MEMORY</b>：需要用户历史 / 偏好 / 目标 / 过往交互。</div>
+        <div class="node pink"><b>RAG</b>：需要外部事实 / 技术知识。</div>
+        <div class="node pink"><b>BOTH</b>：同时需要个体上下文和外部知识。</div>
+        <div class="node pink"><b>DIRECT</b>：两者都不需要。</div>
+        <div class="node good"><b>更合理的 Router</b>：不要硬做四选一，而是分别判断 MEMORY=YES/NO、RAG=YES/NO，再组合。</div>
+        <div class="flow">
+          <span class="pill">Question</span><span class="arrow">→</span>
+          <span class="pill">Router</span><span class="arrow">→</span>
+          <span class="pill">Memory / RAG / Both</span><span class="arrow">→</span>
+          <span class="pill">Context</span><span class="arrow">→</span>
+          <span class="pill">LLM</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>19. Parametric Knowledge / RAG / Web Search</summary>
+      <div class="content">
+        <div class="node"><b>Parametric Knowledge</b>：模型训练阶段学进参数里的知识。</div>
+        <div class="node"><b>RAG Knowledge</b>：本次运行时从外部知识库检索并塞进 Context 的资料。</div>
+        <div class="node"><b>Web Search</b>：本次运行时真正访问互联网得到的新信息。</div>
+        <div class="node warn">模型在 Context 不充分时，可能主动调用自己的参数知识补空白；这不是偷偷联网。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>20. Grounding Policy</summary>
+      <div class="content">
+        <div class="node"><b>STRICT</b>：理论上只允许 Context 中支持的事实。</div>
+        <div class="node"><b>ASSISTED</b>：Context 做事实基础，同时允许模型用参数知识做分析 / 建议。</div>
+        <div class="node warn"><b>Prompt 不是权限边界。</b>写 “Use ONLY the context” 也不能保证模型绝不补充参数知识。</div>
+        <div class="node good"><b>真正严格 grounding</b>：需要 claim validation、citation checking、unsupported claim rejection 等额外机制。</div>
+      </div>
+    </details>
+
+    <details class="card" data-search>
+      <summary>21. 典型 Failure Modes</summary>
+      <div class="content">
+        <div class="node warn"><b>Router Error</b>：该 BOTH 却只选 MEMORY。</div>
+        <div class="node warn"><b>Retriever Error</b>：相关文档没进候选池。</div>
+        <div class="node warn"><b>Reranker Error</b>：正确候选被后置模型重新排后。</div>
+        <div class="node warn"><b>Generator Error</b>：Context 没写，LLM 自己补事实。</div>
+        <div class="node warn"><b>Pipeline Failure</b>：后置模块把前置模块已经修好的结果重新搞坏。</div>
+        <div class="node good"><b>Agent Engineering 的重点</b>：不是“模块越聪明越好”，而是明确职责、边界、失败方式和错误传播。</div>
+      </div>
+    </details>
+
+    <details class="card full" open data-search>
+      <summary>22. 最终量化 Sandbox 映射</summary>
+      <div class="content">
+        <div class="flow">
+          <span class="pill">Market Data</span><span class="arrow">→</span>
+          <span class="pill">Feature Engine</span><span class="arrow">→</span>
+          <span class="pill">Market State</span><span class="arrow">→</span>
+          <span class="pill">Agent / Decision Layer</span><span class="arrow">→</span>
+          <span class="pill">Python Risk Rules</span><span class="arrow">→</span>
+          <span class="pill">Virtual Exchange</span><span class="arrow">→</span>
+          <span class="pill">Position / PnL / Logs</span>
+        </div>
+        <table>
+          <tr><th>模块</th><th>在量化 Sandbox 中负责什么</th></tr>
+          <tr><td>Memory</td><td>之前测试过什么、策略修改历史、用户风险偏好、过往异常事件、长期经验</td></tr>
+          <tr><td>RAG</td><td>交易所 API 文档、研究报告、策略说明、风控文档、论文</td></tr>
+          <tr><td>Structured Data</td><td>价格、成交量、订单、仓位、PnL、drawdown</td></tr>
+          <tr><td>Agent</td><td>决定何时查 Memory、RAG、市场数据、计算工具或调用 Jev</td></tr>
+          <tr><td>Python</td><td>确定性计算、风险约束、模拟撮合、账户状态</td></tr>
+          <tr><td>Jev / LLM</td><td>非确定性判断、解释、策略建议、自然语言交互</td></tr>
+        </table>
+        <div class="node cyan"><b>Task01 → Task03 合体：</b>Agent Loop（行动） + Framework（组织） + Memory/RAG（状态与知识）。</div>
+      </div>
+    </details>
+
+    <details class="card full" open data-search>
+      <summary>23. 一句话毕业总结</summary>
+      <div class="content">
+        <div class="node good">
+          <b>Task01：</b>让 LLM 进入 Action Loop。<br/>
+          <b>Task02：</b>把这个 Loop 组织成 Framework。<br/>
+          <b>Task03：</b>让这个 Framework 开始拥有时间、状态和知识。
+        </div>
+        <div class="node cyan">
+          <b>最终心智模型：</b><br/>
+          Agent = LLM + Tools + Runtime + State + Memory + External Knowledge + Retrieval + Routing + Grounding / Verification
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <div class="footer">Task03 · Memory & Retrieval · Interactive HTML Knowledge Map</div>
+</div>
+
+<script>
+function setAll(open){
+  document.querySelectorAll('details.card').forEach(d => d.open = open);
+}
+function clearSearch(){
+  const input = document.getElementById('search');
+  input.value = '';
+  document.querySelectorAll('[data-search]').forEach(el => el.classList.remove('hidden'));
+}
+document.getElementById('search').addEventListener('input', function(){
+  const q = this.value.trim().toLowerCase();
+  document.querySelectorAll('[data-search]').forEach(el => {
+    if(!q){ el.classList.remove('hidden'); return; }
+    const match = el.innerText.toLowerCase().includes(q);
+    el.classList.toggle('hidden', !match);
+    if(match) el.open = true;
+  });
+});
+</script>
+</body>
+</html>

@@ -2066,3 +2066,17 @@ Task02 的核心是：
 那么 Task03 的核心就是：
 
 > **让这个 Framework 开始拥有时间、状态和知识。**
+
+<img width="1347" height="1095" alt="1c360301-4aab-4318-b2b8-f6eba72a09cf" src="https://github.com/user-attachments/assets/29ed27c3-ee27-4312-b660-8909a5a66724" />
+
+<img width="1347" height="1095" alt="6a1a7d5e-bde1-4d5b-9d2f-3e6af0387c15" src="https://github.com/user-attachments/assets/79f6f3db-8046-4970-a257-a2ce57a0d11e" />
+
+<img width="1347" height="1095" alt="89a2cf9a-7ef2-4fcc-aa58-40b8490e0642" src="https://github.com/user-attachments/assets/c61c65f6-ca68-4916-810a-4a7d2069d994" />
+
+<img width="1347" height="1095" alt="08cd44f1-5192-431c-88b4-fc715b53412f" src="https://github.com/user-attachments/assets/441e7e42-1c7f-4680-9811-0390ad602aeb" />
+
+<img width="1347" height="1095" alt="db1100cb-cf65-472b-b435-36cfb1038333" src="https://github.com/user-attachments/assets/a188fce0-9fa3-401d-befe-da00cdf225a3" />
+
+<img width="1347" height="1095" alt="482590fc-8d24-440a-ae5d-748b7cdbe020" src="https://github.com/user-attachments/assets/e595ef75-d920-4ef6-943c-94d1c0a8913f" />
+
+[task03_memory_retrieval_knowledge_map.html](https://github.com/user-attachments/files/32602163/task03_memory_retrieval_knowledge_map.html)

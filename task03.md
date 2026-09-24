@@ -1,3 +1,5 @@
+P.S.知识地图可见https://github.com/inthewoods1950/hello-agent-study-record/blob/main/task03_memory_retrieval_knowledge_map.html
+
 # Task03｜Memory & Retrieval：从“让 Agent 记住”到“让 Agent 找对信息”
 
 本次任务学习的是 Datawhale `hello-agents` Chapter 8：**记忆与检索（Memory & Retrieval）**。
